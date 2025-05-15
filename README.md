@@ -24,7 +24,7 @@ sudo apt update && sudo apt install certbot
 ```
 
 #### 4) Generate wildcard
-Note that you can issue wildcard certificates for subdomains by adding -d *.sub.site.com to the command below
+Note that you can issue wildcard certificates for subdomains by adding `-d *.sub.site.com` to the command below:
 ```bash
 sudo certbot certonly --manual-public-ip-logging-ok --agree-tos --email info@site.com --renew-by-default -d site.com -d *.site.com --manual --manual-auth-hook $PWD/auth-hook.sh --manual-cleanup-hook $PWD/cleanup.sh --preferred-challenges dns-01 --server https://acme-v02.api.letsencrypt.org/directory
 ```
