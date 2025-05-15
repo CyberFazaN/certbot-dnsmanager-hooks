@@ -18,7 +18,7 @@ else
 fi
 
 # Save created record ELID to cleanup it later
-echo "$CREATE_DOMAIN.$PLID.%20TXT%20%20$CERTBOT_VALIDATION" >> $_dir/elid.txt
+echo "$CREATE_DOMAIN.$PLID.%20TXT%20%20$CERTBOT_VALIDATION" >> /tmp/certbot-dnsmanager-elids.txt
 
 OUT=$(curl -s -X GET "https://$API_HOST/dnsmgr?out=json&authinfo=$API_USERNAME:$API_PASSWORD&func=domain.record.edit&name=$CREATE_DOMAIN&plid=$PLID&rtype=txt&ttl=3600&value=$CERTBOT_VALIDATION&sok=ok")
 
