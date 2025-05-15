@@ -1,25 +1,15 @@
 #!/bin/bash
 
 _dir="$(dirname "$0")"
-
 source "$_dir/config.sh"
 
-
-# TODO 
-# if [ -f /tmp/CERTBOT_$CERTBOT_DOMAIN/RECORD_ID ]; then
-#         RECORD_ID=$(cat /tmp/CERTBOT_$CERTBOT_DOMAIN/RECORD_ID)
-#         rm -f /tmp/CERTBOT_$CERTBOT_DOMAIN/RECORD_ID
-# fi
-
-# # Remove the challenge TXT record from the zone
-# if [ -n "${RECORD_ID}" ]; then
-	
-# 	RESULT=$(curl -s -X POST "https://pddimp.yandex.ru/api2/admin/dns/del" \
-#      -H "PddToken: $API_KEY" \
-#      -d "domain=$CERTBOT_DOMAIN&record_id=$RECORD_ID" \
-# 	 | python -c "import sys,json;print(json.load(sys.stdin)['success'])")
-	
-# 	echo $RESULT 
-# fi
-
-echo "OK"
+if [[ -f "$_dir/elid.txt" ]]; then
+  while IFS= read -r ELID; do
+    PLID=$(echo "$ELID" | sed -E 's/^.*\.([a-zA-Z0-9-]+\.[a-zA-Z]{2,})\.%20TXT.*/\1/')
+    OUT=$(curl -s -X GET "https://$API_HOST/dnsmgr?out=json&authinfo=$API_USERNAME:$API_PASSWORD&func=domain.record.delete&plid=$PLID&elid=$ELID")
+  done < "$_dir/elid.txt"
+  rm "$_dir/elid.txt"
+  echo OK
+else
+  echo Already OK. Skipping
+fi
